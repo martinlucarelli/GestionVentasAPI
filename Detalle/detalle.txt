@@ -1,0 +1,18 @@
+
+
+Relaciones entre modelos: Cuando existe una relacion entre dos modelos (tablas) se debe tener en cuenta el tipo de relacion para determinar
+correctamente que se debe definir en cada clase.
+
+    Uno a muchos: Cuando la relacion es uno a muchos hay que tener en cuenta que el modelo que tendra la clave foranea, es decir el "uno" debera
+    instanciar un objeto del modelo que es el "mucho" , por otro lado el modelo que es "muchos" debera contener una coleccion con Icollection del
+    modelo que es el "uno" --> Icollection<Producto> Productos;
+
+    Muchos a muchos: En este tipo de relacion se debe crear una tabla intermedia, esta tabla es la que contiene a las claves foraneas, por lo
+    tanto tendra que instanciar a dos objetos de las dos tablas que tienen la relacion muchos a muchos. Por otro lado los modelos que estan
+    relacionados deben contener una lista de la clase de la tabla intermedia.
+
+    Por lo tanto siempre el modelo que debe contener las claves foraneas debe instanciar un objeto, mientras que el modelo que no tiene las 
+    claves foraneas debe tener una lista del tipo del modelo que tiene las claves foraneas.
+
+
+    
