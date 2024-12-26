@@ -35,6 +35,8 @@ public class VentasContext : DbContext
             producto.Property(p=>p.nombreProducto).IsRequired();
             producto.Property(p=>p.cantidadStock).IsRequired();
             producto.HasOne(p=>p.categoria).WithMany(c=>c.productos).HasForeignKey(c=>c.categoriaId);//calve foranea
+
+             
         });
 
         modelBuilder.Entity<Venta>(venta=>

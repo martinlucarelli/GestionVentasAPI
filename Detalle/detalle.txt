@@ -15,4 +15,37 @@ correctamente que se debe definir en cada clase.
     claves foraneas debe tener una lista del tipo del modelo que tiene las claves foraneas.
 
 
-    
+Problema con BadRequest en el POST: Una vez que la estructura del proyecto estaba correcta, probe hacer las primeras consultas con Postman.
+Solamente elegi el modelo Categoria para probar.El GET funcionaba perfecto, pero el POST me daba un error en Postman que decia 
+que el campo 'Productos' era requerido, se referia a la lista de prodcutos que es la relacion con el modelo prodcuto. Cabe aclarar que 
+este campo no es un campo de la base de datos, y tambien hay que aclarar que el error me lo daba Postman, no la aplicacion.
+Para resolverlo intente aplicar [JsonIngnore],[BindNever] y [NotMapped] en el archivo que contiene el modelo, pero ninguno funciono.
+
+Solucion: La solucion finalmente fue aplicar DTO (Data Transfer Object), estos objetos contienen unicamente los datos para una 
+operacion espeficica. Por ejemplo , en lugar de enviar un objeto completo del tipo Categoria solo se envian los datos minimos requeridos
+(asi se puede obviar la lista de productos que me pedia como campo). 
+Tambien los DTO sirven para
+    Seguridad: Ocultan detalles internos del modelo de la base de datos (como la relaciones)
+    Flexibilidad: Se puede ajustar la estructura del DTO a las necesidades del cliente sin afectar el modelo de la base de datos.
+
+    Aplicacion de DTO's:
+
+    1. Cree una nueva clase en la carpta DTO que solo contenga los datos que quiero que se manejen (en este caso nombre y descripcion de
+    la Categoria).
+    2. Ahora en el Servicio, la funcion Save va a recibir por parametro una lista de la clase CategoriaDTO.
+    3. Dentro del metodo Save se realiza el mappeo, el mappeo puede ser manual o realizado por librerias, en este caso fue manual.
+    En el mappeo lo que se hace es convertir los datos del DTO al modelo 'original'
+    Ej:
+            foreach(var catDto in listaCategoriasRecibida)
+            {   
+                var categoria = new Categoria
+                {
+                    nombreCategoria= catDto.NombreCategoria,
+                    descripcion=catDto.Descripcion
+                };
+                context.Add(categoria);
+            }
+            await context.SaveChangesAsync();
+
+    Como estoy manejando una lista de DTO reciba por parametro a traves de la request utlizo un foreach para recorrerla y en cada iteracion
+    creo un objeto Categoria (el modelo 'origial'), luego le paso los datos del DTO y por ultimo agrego ese objeto orignial a la base de datos.
