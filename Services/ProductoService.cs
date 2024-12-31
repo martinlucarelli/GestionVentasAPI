@@ -28,8 +28,8 @@ public class ProductoService : IProductoService
                 var producto=new Producto
                 {
                     nombreProducto=proDTO.nombreProducto,
-                    precio=proDTO.precio,
-                    cantidadStock=proDTO.cantidadStock,
+                    precio=(double)proDTO.precio,
+                    cantidadStock=(int)proDTO.cantidadStock,
                     categoriaId=proDTO.categoriaId
 
                 };
@@ -44,6 +44,76 @@ public class ProductoService : IProductoService
         }
     }
 
+    public async Task Delete(Guid idEliminar)
+    {
+        try
+        {
+            var productoAEliminar = await context.productos.FindAsync(idEliminar);
+
+            if(productoAEliminar != null)
+            {
+                context.productos.Remove(productoAEliminar);
+                
+                
+            }
+            else
+            {
+                System.Console.WriteLine("NO SE ENCONTRO EL PRODUCTO QUE SE DESEA ELIMINAR");
+            }
+            
+            await context.SaveChangesAsync();
+
+        }
+        catch(Exception ex)
+        {
+            System.Console.WriteLine(ex.Message + "ERROR DEL METODO DELETE (ProductoService.cs)");
+        }
+    }
+
+    public async Task Update(Guid id, ProductoDTO produpd)
+    {
+        try
+        {
+            var prodExistente = await context.productos.FindAsync(id);
+
+            if(prodExistente != null)
+            {
+                if(!string.IsNullOrEmpty(produpd.nombreProducto))
+                {
+                    prodExistente.nombreProducto=produpd.nombreProducto;
+                }
+                if(produpd.precio.HasValue && produpd.precio > 0)
+                {
+                    prodExistente.precio= (double)produpd.precio;
+                }
+                if(produpd.cantidadStock.HasValue && produpd.cantidadStock >=0)
+                {
+                    prodExistente.cantidadStock=(int)produpd.cantidadStock;
+                }
+                if(produpd.categoriaId != Guid.Empty)
+                {
+                    prodExistente.categoriaId=produpd.categoriaId;
+                }
+
+            }
+            else
+            {
+                System.Console.WriteLine("NO SE ENCONTRO EL REGISTRO QUE SE QUIERE MODIFICAR");
+            }
+
+            await context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            System.Console.WriteLine(ex.Message + "ERROR EN EL METODO UPDTAE (ProductoService.cs)");
+        }
+
+
+
+
+    }
+
+
 
 }
 
@@ -52,5 +122,7 @@ public interface IProductoService
 {
     IEnumerable<Producto> Get();
     Task Save(List<ProductoDTO> listaProductos);
+    Task Delete(Guid id);
+    Task Update(Guid id, ProductoDTO produpd);
 
 }

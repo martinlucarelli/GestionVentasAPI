@@ -33,4 +33,22 @@ public class ProductoController : ControllerBase
         return Ok();
     }
 
+    [HttpDelete ("{id}")]
+
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await productoService.Delete(id);
+        return NoContent();
+    }
+
+    [HttpPatch ("{id}")]
+
+    public async Task<IActionResult> Patch(Guid id,[FromBody] ProductoDTO prodUpd)
+    {   
+        await productoService.Update(id,prodUpd);
+
+        return Ok();
+
+    } 
+
 }

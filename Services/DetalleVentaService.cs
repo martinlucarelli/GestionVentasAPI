@@ -14,7 +14,7 @@ public class    DetalleVentaService : IDetalleVentaService
     public IEnumerable<DetalleVenta> Get()
     {
         return context.DetalleVentas;
-    }
+    }   
 
     public async Task Save(List<DetalleVentaDTO> lsitaDetalleVenta)
     {
@@ -41,6 +41,20 @@ public class    DetalleVentaService : IDetalleVentaService
         }
     }
 
+    public IEnumerable<DetalleVenta> GetDetalle(Guid idVenta)
+    {
+        try
+        {
+            return context.DetalleVentas.Where(dv=> dv.ventaId == idVenta).ToList();   
+        }
+        catch(Exception ex)
+        {
+            System.Console.WriteLine(ex.Message + "ERROR DEL METODO GETDETALLE (VentaService.cs)");
+            return Enumerable.Empty<DetalleVenta>();
+        }
+
+    }
+
 
 }
 
@@ -49,5 +63,6 @@ public interface IDetalleVentaService
 {
     IEnumerable<DetalleVenta> Get();
     Task Save(List<DetalleVentaDTO> lsitaDetalleVenta);
+    IEnumerable<DetalleVenta> GetDetalle(Guid idVenta);
 
 }

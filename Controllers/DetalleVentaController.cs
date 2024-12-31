@@ -27,6 +27,12 @@ public class DetalleVentaController : ControllerBase
         return Ok(detalleVentaService.Get());
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetDetalle(Guid id)
+    {
+        return Ok(detalleVentaService.GetDetalle(id));
+    }
+
     [HttpPost]
 
     public async Task<IActionResult> Post ([FromBody] List<DetalleVentaDTO> listaDetalleVentas)

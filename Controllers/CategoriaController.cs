@@ -28,13 +28,38 @@ public class CategoriaController : ControllerBase
         return Ok(categoriaService.Get());
     }
 
-    [HttpPost]
 
+
+
+    [HttpPost]
     public async Task<IActionResult> Post ([FromBody] List<CategoriaDTO> listaCategoriasRecibidas)
     {
         
         await categoriaService.Save(listaCategoriasRecibidas);
         return Ok();
+    }
+
+    [HttpPost ("{id}")]
+
+
+    [HttpDelete("{id}")]
+
+
+    public async Task<IActionResult> Delete (Guid id)
+    {
+        await categoriaService.Delete(id);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+
+    public async Task<IActionResult> Patch(Guid id, [FromBody] CategoriaDTO catupd)
+    {
+
+        await categoriaService.Update(id,catupd);
+        
+        return Ok();
+
     }
 
 }

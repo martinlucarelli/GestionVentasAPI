@@ -50,6 +50,8 @@ public class VentaService : IVentaService
     }
 
 
+
+
 }
 
 
@@ -57,5 +59,6 @@ public interface IVentaService
 {
     IEnumerable<Venta> Get();
     Task Save(List<VentaDTO> listaVentas);
+    
 
 }
