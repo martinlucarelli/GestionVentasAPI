@@ -1,14 +1,18 @@
 
 
+using Microsoft.IdentityModel.Tokens;
+
 public class    DetalleVentaService : IDetalleVentaService
 {
 
     VentasContext context;
+    public readonly  ILogger<DetalleVenta>_logger;
 
-    public DetalleVentaService(VentasContext bdcontext)
+    public DetalleVentaService(VentasContext bdcontext, ILogger<DetalleVenta> logger)
     {
 
         context=bdcontext;
+        _logger=logger;
     }
 
     public IEnumerable<DetalleVenta> Get()
@@ -37,7 +41,7 @@ public class    DetalleVentaService : IDetalleVentaService
         }
         catch(Exception ex)
         {
-           System.Console.WriteLine(ex.Message + ": Erro del metodo save (DetalleVentaService.cs)");
+           _logger.LogError(ex.Message + ": Erro del metodo save (DetalleVentaService.cs)");
         }
     }
 
@@ -45,11 +49,18 @@ public class    DetalleVentaService : IDetalleVentaService
     {
         try
         {
-            return context.DetalleVentas.Where(dv=> dv.ventaId == idVenta).ToList();   
+            var Detalles= context.DetalleVentas.Where(dv=> dv.ventaId == idVenta).ToList();
+
+            if(Detalles.IsNullOrEmpty())
+            {
+                _logger.LogError("NO SE ENCONTRO LA VENTA DE LA QUE SE QUIERE MOSTRAR EL DETALLE (VERIFICAR ID)");
+            }
+            return Detalles;
+              
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + "ERROR DEL METODO GETDETALLE (VentaService.cs)");
+            _logger.LogError(ex.Message + "ERROR DEL METODO GETDETALLE (VentaService.cs)");
             return Enumerable.Empty<DetalleVenta>();
         }
 

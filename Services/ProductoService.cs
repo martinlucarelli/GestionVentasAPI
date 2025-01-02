@@ -7,11 +7,13 @@ public class ProductoService : IProductoService
 {
 
     VentasContext context;
+    public readonly ILogger<ProductoService> _logger;
 
-    public ProductoService(VentasContext bdcontext)
+    public ProductoService(VentasContext bdcontext,ILogger<ProductoService> logger)
     {
 
         context=bdcontext;
+        _logger=logger;
     }
 
     public IEnumerable<Producto> Get()
@@ -40,7 +42,7 @@ public class ProductoService : IProductoService
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + ": Erro del metodo save (ProductoService.cs)");
+            _logger.LogError(ex.Message + ": Erro del metodo save (ProductoService.cs)");
         }
     }
 
@@ -58,7 +60,7 @@ public class ProductoService : IProductoService
             }
             else
             {
-                System.Console.WriteLine("NO SE ENCONTRO EL PRODUCTO QUE SE DESEA ELIMINAR");
+                _logger.LogError("NO SE ENCONTRO EL PRODUCTO QUE SE DESEA ELIMINAR");
             }
             
             await context.SaveChangesAsync();
@@ -66,7 +68,7 @@ public class ProductoService : IProductoService
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + "ERROR DEL METODO DELETE (ProductoService.cs)");
+            _logger.LogError(ex.Message + "ERROR DEL METODO DELETE (ProductoService.cs)");
         }
     }
 
@@ -98,14 +100,14 @@ public class ProductoService : IProductoService
             }
             else
             {
-                System.Console.WriteLine("NO SE ENCONTRO EL REGISTRO QUE SE QUIERE MODIFICAR");
+                _logger.LogError("NO SE ENCONTRO EL REGISTRO QUE SE QUIERE MODIFICAR");
             }
 
             await context.SaveChangesAsync();
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + "ERROR EN EL METODO UPDTAE (ProductoService.cs)");
+            _logger.LogError(ex.Message + "ERROR EN EL METODO UPDTAE (ProductoService.cs)");
         }
 
 

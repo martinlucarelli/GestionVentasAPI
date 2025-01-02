@@ -8,16 +8,19 @@ public class CategoriaService : ICategoriaService
 {
 
     VentasContext context;
+    public readonly ILogger<CategoriaService> _logger;
 
-    public CategoriaService(VentasContext bdcontext)
+    public CategoriaService(VentasContext bdcontext, ILogger<CategoriaService> logger)
     {
 
         context=bdcontext;
+        _logger=logger;
     }
 
     public IEnumerable<Categoria> Get()
     {
         return context.categorias;
+        
     }
 
     public async Task Save(List<CategoriaDTO> listaCategoriasRecibida)
@@ -37,7 +40,7 @@ public class CategoriaService : ICategoriaService
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + ": Erro del metodo save (CategoriaService.cs)");
+            _logger.LogError(ex.Message + ": Erro del metodo save (CategoriaService.cs)");
         }
     }
 
@@ -53,7 +56,7 @@ public class CategoriaService : ICategoriaService
             }
             else
             {
-                System.Console.WriteLine("No se encontro la cateogria que se desea eliminar");
+                _logger.LogError("No se encontro la cateogria que se desea eliminar");
             }
 
 
@@ -62,7 +65,7 @@ public class CategoriaService : ICategoriaService
         }
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + "ERROR DEL METODO DELETE (CategoriaService.cs)");
+            _logger.LogError(ex.Message + "ERROR DEL METODO DELETE (CategoriaService.cs)");
         }
 
     }
@@ -91,14 +94,14 @@ public class CategoriaService : ICategoriaService
             }
             else
             {
-                System.Console.WriteLine("No se encontro la categoria que desea modificar");
+                _logger.LogError("No se encontro la categoria que desea modificar");
             }
 
 
         }   
         catch(Exception ex)
         {
-            System.Console.WriteLine(ex.Message + "ERROR EN EL METODO UPDATE (categoriaService.cs)");
+            _logger.LogError(ex.Message + "ERROR EN EL METODO UPDATE (categoriaService.cs)");
         }
 
     }
